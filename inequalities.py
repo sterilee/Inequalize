@@ -1,3 +1,5 @@
+import streamlit as st
+st.title("Quadratic Inequality Solver")
 import math
 print("Solve the inequality ax²+bx+c <=> 0")
 a = float(input("What is the value of a?: "))
@@ -57,4 +59,5 @@ if sign == "<=":
         if x1 < x2 :
           print(f"{x1}<=x<={x2}")
         if x2 < x1:
+
           print(f"{x2}<=x<={x1}")
