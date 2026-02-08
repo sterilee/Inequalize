@@ -1,63 +1,72 @@
 import streamlit as st
-st.title("Quadratic Inequality Solver")
 import math
-print("Solve the inequality ax²+bx+c <=> 0")
-a = float(input("What is the value of a?: "))
-if a <= 0:
-    print("Enter a positive value. Restart program"), exit ()
-b = float(input("What is the value of b?: "))
-c = float(input("What is the value of c?: "))
-sign = input("What is the sign of the inequality? choose between <, <=, >, >=: ")
 
-delta = pow(b, 2)-4*a*c
+# Title
+st.title("Quadratic Inequality Solver")
+st.write("Solve the inequality: ax² + bx + c <sign> 0")
 
-if sign == ">": 
-    if delta < 0 : print("the inequality is true for every real number")
-    exit()
-    
-    x1 = (-b + math.sqrt(delta)) / (2*a)
-    x2 = (-b - math.sqrt(delta)) / (2*a)
-    if delta == 0:
-      print(f"x =/= {x1}")
-    exit()  
-    if delta > 0:
-        if x1 < x2 :
-         print(f"x1 < {round(x1, 2)}, x2 > {round(x2, 2)}")
-        if x1 > x2:
-            print(f"x1 > {round(x1, 2)}, x2 < {round(x2, 2)}")
-    
-if sign == ">=":
-    if delta <= 0 : print("the inequality is true for every real number")
-    exit()
-    
-    x1 = (-b + math.sqrt(delta)) / (2*a)
-    x2 = (-b - math.sqrt(delta)) / (2*a)
-    if delta > 0:
-      print(f"x1 = {round(x1, 2)}, x2 = {round(x2, 2)}")
-if sign == "<": 
-    if delta <= 0 : print("the inequality is not satisfied for every real number")
-    exit()
-    
-    x1 = (-b + math.sqrt(delta)) / (2*a)
-    x2 = (-b - math.sqrt(delta)) / (2*a)
-    
-    if delta > 0:
-        if x1 < x2 :
-         print(f"{x1}<x<{x2}")
-        if x1 > x2:
-            print(f"{x2}<x<{x1}")
-if sign == "<=": 
-    if delta < 0 : print("the inequality is true for every real number")
-    exit()
-    if delta == 0:
-      print(f"x = {x1}")
-      exit()
-    
-    x1 = (-b + math.sqrt(delta)) / (2*a)
-    x2 = (-b - math.sqrt(delta)) / (2*a)
-    if delta > 0:
-        if x1 < x2 :
-          print(f"{x1}<=x<={x2}")
-        if x2 < x1:
+# Inputs
+a = st.number_input("Enter a (must be > 0)", value=1.0)
+b = st.number_input("Enter b", value=0.0)
+c = st.number_input("Enter c", value=0.0)
+sign = st.selectbox("Select the inequality sign", ["<", "<=", ">", ">="])
 
-          print(f"{x2}<=x<={x1}")
+# Solve button
+if st.button("Solve"):
+    # Check a
+    if a <= 0:
+        st.error("a must be positive!")
+    else:
+        delta = b**2 - 4*a*c
+        st.write(f"Discriminant Δ = {delta}")
+
+        # Logic for ">"
+        if sign == ">":
+            if delta < 0:
+                st.success("The inequality is true for every real number")
+            else:
+                x1 = (-b + math.sqrt(delta)) / (2*a)
+                x2 = (-b - math.sqrt(delta)) / (2*a)
+                if delta == 0:
+                    st.info(f"x ≠ {x1}")
+                else:
+                    if x1 < x2:
+                        st.info(f"x < {round(x2, 2)} or x > {round(x1, 2)}")
+                    else:
+                        st.info(f"x < {round(x1, 2)} or x > {round(x2, 2)}")
+
+        # Logic for ">="
+        elif sign == ">=":
+            if delta <= 0:
+                st.success("The inequality is true for every real number")
+            else:
+                x1 = (-b + math.sqrt(delta)) / (2*a)
+                x2 = (-b - math.sqrt(delta)) / (2*a)
+                st.info(f"x ≤ {round(max(x1, x2), 2)} or x ≥ {round(min(x1, x2), 2)}")
+
+        # Logic for "<"
+        elif sign == "<":
+            if delta <= 0:
+                st.info("The inequality is not satisfied for any real number")
+            else:
+                x1 = (-b + math.sqrt(delta)) / (2*a)
+                x2 = (-b - math.sqrt(delta)) / (2*a)
+                if x1 < x2:
+                    st.info(f"{round(x1,2)} < x < {round(x2,2)}")
+                else:
+                    st.info(f"{round(x2,2)} < x < {round(x1,2)}")
+
+        # Logic for "<="
+        elif sign == "<=":
+            if delta < 0:
+                st.success("The inequality is true for every real number")
+            else:
+                x1 = (-b + math.sqrt(delta)) / (2*a)
+                x2 = (-b - math.sqrt(delta)) / (2*a)
+                if delta == 0:
+                    st.info(f"x = {round(x1,2)}")
+                else:
+                    if x1 < x2:
+                        st.info(f"{round(x1,2)} ≤ x ≤ {round(x2,2)}")
+                    else:
+                        st.info(f"{round(x2,2)} ≤ x ≤ {round(x1,2)}")
